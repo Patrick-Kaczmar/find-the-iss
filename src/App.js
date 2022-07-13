@@ -1,5 +1,7 @@
 import React from "react";
+import './app.css'
 import Navigation from "./navigation/Navigation";
+import Cart from "./cart/Cart";
 
 function App() {
 
@@ -10,6 +12,7 @@ function App() {
   return (
     <>
       <Navigation />
+      <Cart />
     </>
   );
 }
