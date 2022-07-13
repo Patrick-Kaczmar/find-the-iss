@@ -1,0 +1,7 @@
+.showcase-container {
+    background-color: red;
+    min-width: 70%;
+    max-width: 100%;
+    height: 600px;
+    margin-left: 50px;
+}
