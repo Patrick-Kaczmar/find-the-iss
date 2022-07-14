@@ -2,8 +2,6 @@ import React from "react";
 import './app.css'
 import Navigation from "./navigation/Navigation";
 import Cart from "./cart/Cart";
-import StoreItiems from "./storeItems/StoreItems";
-import Modal from "./modal/Modal";
 
 function App() {
 
@@ -15,11 +13,6 @@ function App() {
     <>
       <Navigation />
       <Cart />
-      <div className="main-container">
-        <StoreItiems />
-        <Modal />
-      </div>
-      
     </>
   );
 }
