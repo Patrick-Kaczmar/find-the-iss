@@ -61,11 +61,6 @@ function App() {
         type: "symbol",
         source: "iss",
         layout: {
-          // This icon is a part of the Mapbox Streets style.
-          // To view all images available in a Mapbox style, open
-          // the style in Mapbox Studio and click the "Images" tab.
-          // To add a new image to the style at runtime see
-          // https://docs.mapbox.com/mapbox-gl-js/example/add-image/
           "icon-image": "rocket-15",
         },
       })
@@ -110,6 +105,21 @@ function App() {
       }
     })
   })
+
+  useEffect(() => {
+    if (!map.current) return // wait for map to initialize
+    map.current.addControl(
+      new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true,
+        },
+        // When active the map will receive updates to the device's location as it changes.
+        trackUserLocation: true,
+        // Draw an arrow next to the location dot to indicate which direction the device is heading.
+        showUserHeading: true,
+      })
+    )
+  }, [])
 
   return (
     <>
