@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from "react"
 import mapboxgl from "!mapbox-gl" // eslint-disable-line import/no-webpack-loader-syntax
+import distance from "@turf/distance"
 
 mapboxgl.accessToken =
   "pk.eyJ1Ijoiemh5bG93IiwiYSI6ImNsNXJrZzBpeDFhYmkzY292bGNjZnppcDIifQ.qbE1BTCATVEh2s6D-uaicg"
@@ -7,6 +8,8 @@ mapboxgl.accessToken =
 function App() {
   const mapContainer = useRef(null)
   const map = useRef(null)
+  const [userLng, setUserLng] = useState(null)
+  const [userLat, setUserLat] = useState(null)
   const [lng, setLng] = useState(-70.9)
   const [lat, setLat] = useState(42.35)
   const [zoom, setZoom] = useState(3)
@@ -82,7 +85,7 @@ function App() {
           // Fly the map to the location.
           map.current.flyTo({
             center: [longitude, latitude],
-            speed: 0.5,
+            speed: 1,
           })
           // Return the location of the ISS as GeoJSON.
           return {
@@ -120,6 +123,16 @@ function App() {
       })
     )
   }, [])
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      console.log(position)
+      setUserLat(position.coords.latitude)
+      setUserLng(position.coords.longitude)
+    })
+  }, [])
+
+  console.log(distance([userLat, userLng], [lat, lng], 'miles'))
 
   return (
     <>
