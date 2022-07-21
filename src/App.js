@@ -1,8 +1,7 @@
 import React, { useRef, useEffect, useState } from "react"
 import mapboxgl from "!mapbox-gl" // eslint-disable-line import/no-webpack-loader-syntax
 import distance from "@turf/distance"
-
-mapboxgl.accessToken={process}
+mapboxgl.accessToken="pk.eyJ1Ijoiemh5bG93IiwiYSI6ImNsNXJrZzBpeDFhYmkzY292bGNjZnppcDIifQ.qbE1BTCATVEh2s6D-uaicg"
 
 function App() {
   const mapContainer = useRef(null)
@@ -120,13 +119,6 @@ function App() {
         // Draw an arrow next to the location dot to indicate which direction the device is heading.
         showUserHeading: true,
       })
-    )
-  }, [])
-
-  useEffect(() => {
-    if (!map.current) return // wait for map to initialize
-    map.current.addControl(
-      
     )
   }, [])
 
