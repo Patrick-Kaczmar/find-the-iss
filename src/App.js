@@ -2,16 +2,18 @@ import React, { useRef, useEffect, useState } from "react"
 import mapboxgl from "!mapbox-gl" // eslint-disable-line import/no-webpack-loader-syntax
 import distance from "@turf/distance"
 
-mapboxgl.accessToken =
-  "pk.eyJ1Ijoiemh5bG93IiwiYSI6ImNsNXJrZzBpeDFhYmkzY292bGNjZnppcDIifQ.qbE1BTCATVEh2s6D-uaicg"
+mapboxgl.accessToken={process}
 
 function App() {
   const mapContainer = useRef(null)
   const map = useRef(null)
+  const [barLat, setBarLat] = useState(null)
+  const [barLng, setBarLng] = useState(null)
+  const [barZoom, setBarZoom] = useState(null)
   const [userLng, setUserLng] = useState(null)
   const [userLat, setUserLat] = useState(null)
-  const [lng, setLng] = useState(-70.9)
-  const [lat, setLat] = useState(42.35)
+  const [issLng, setIssLng] = useState(null)
+  const [issLat, setIssLat] = useState(null)
   const [zoom, setZoom] = useState(3)
 
   useEffect(() => {
@@ -28,9 +30,9 @@ function App() {
   useEffect(() => {
     if (!map.current) return // wait for map to initialize
     map.current.on("move", () => {
-      setLng(map.current.getCenter().lng.toFixed(4))
-      setLat(map.current.getCenter().lat.toFixed(4))
-      setZoom(map.current.getZoom().toFixed(2))
+      setBarLng(map.current.getCenter().lng.toFixed(4))
+      setBarLat(map.current.getCenter().lat.toFixed(4))
+      setBarZoom(map.current.getZoom().toFixed(2))
     })
   })
 
@@ -72,6 +74,8 @@ function App() {
       const updateSource = setInterval(async () => {
         const geojson = await getLocation(updateSource)
         map.current.getSource("iss").setData(geojson)
+        setIssLat(geojson.features[0].geometry.coordinates[0])
+        setIssLng(geojson.features[0].geometry.coordinates[1])
       }, 5000)
 
       async function getLocation(updateSource) {
@@ -82,11 +86,6 @@ function App() {
             { method: "GET" }
           )
           const { latitude, longitude } = await response.json()
-          // Fly the map to the location.
-          map.current.flyTo({
-            center: [longitude, latitude],
-            speed: 1,
-          })
           // Return the location of the ISS as GeoJSON.
           return {
             type: "FeatureCollection",
@@ -125,20 +124,30 @@ function App() {
   }, [])
 
   useEffect(() => {
+    if (!map.current) return // wait for map to initialize
+    map.current.addControl(
+      
+    )
+  }, [])
+
+  useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
-      console.log(position)
       setUserLat(position.coords.latitude)
       setUserLng(position.coords.longitude)
     })
   }, [])
 
-  console.log(distance([userLat, userLng], [lat, lng], 'miles'))
+  useEffect(() => {
+    console.log(`The distance from your location is ${Math.round(distance([userLat, userLng], [issLat, issLng], "miles"))} miles`)
+  }, [issLat, issLng, userLat, userLng])
+
+  
 
   return (
     <>
       <div>
         <div className="sidebar">
-          Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
+          Longitude: {barLng} | Latitude: {barLat} | Zoom: {barZoom}
         </div>
         <div ref={mapContainer} className="map-container" />
       </div>
