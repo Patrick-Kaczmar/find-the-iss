@@ -13,6 +13,7 @@ function App() {
   const [userLat, setUserLat] = useState(null)
   const [issLng, setIssLng] = useState(null)
   const [issLat, setIssLat] = useState(null)
+  const [userDistance, setUserDistance] = useState(null)
 
   useEffect(() => {
     if (map.current) return // initialize map only once
@@ -138,13 +139,18 @@ function App() {
       zoom: 5,
       speed: 0.5
     })
+    updateDistance()
     locationFinder()
   }
 
   function locationFinder() {
-    fetch(`https://api.openweathermap.org/data/3.0/onecall?lat={${issLat}}&lon={${issLng}}&appid={${process.env.REACT_APP_OPEN_WEATHER_KEY}}`)
+    fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${issLat}&lon=${issLng}&appid=${process.env.REACT_APP_OPEN_WEATHER_KEY}`)
     .then(response => response.json())
     .then(data => console.log(data))
+  }
+
+  function updateDistance() {
+    setUserDistance(Math.round(distance([userLat, userLng], [issLat, issLng]))) 
   }
 
   return (
@@ -157,7 +163,18 @@ function App() {
       </div>
       <button onClick={findTheIss} className="issBtn">Find the ISS</button>
       <div className="issInfo">
-
+        <div className="distance">
+          <h1 id="distanceHeader">The I.S.S is {userDistance} miles from your location</h1>
+        </div>
+        <div className="info-card">
+          <h1>Country:</h1>
+        </div>
+        <div className="info-card">
+          <h1>State:</h1>
+        </div>
+        <div className="info-card">
+          <h1>Place:</h1>
+        </div>
       </div>
     </>
   )
