@@ -138,6 +138,13 @@ function App() {
       zoom: 5,
       speed: 0.5
     })
+    locationFinder()
+  }
+
+  function locationFinder() {
+    fetch(`https://api.openweathermap.org/data/3.0/onecall?lat={${issLat}}&lon={${issLng}}&appid={${process.env.REACT_APP_OPEN_WEATHER_KEY}}`)
+    .then(response => response.json())
+    .then(data => console.log(data))
   }
 
   return (
