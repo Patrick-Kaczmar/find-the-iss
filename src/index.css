@@ -27,6 +27,7 @@
 
 .distance {
     background-color: rgb(0, 0, 0);
+    height: 70px;
 }
 
 .info-card {
@@ -42,7 +43,12 @@
     text-align: center;
 }
 
+.card-description {
+    margin-top: 80px;
+}
+
 #distanceHeader {
     text-align: center;
     color: white;
+    padding-top: 15px;
 }

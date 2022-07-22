@@ -14,6 +14,9 @@ function App() {
   const [issLng, setIssLng] = useState(null)
   const [issLat, setIssLat] = useState(null)
   const [userDistance, setUserDistance] = useState(null)
+  const [country, setCountry] = useState(null)
+  const [state, setState] = useState(null)
+  const [place, setPlace] = useState(null)
 
   useEffect(() => {
     if (map.current) return // initialize map only once
@@ -146,7 +149,12 @@ function App() {
   function locationFinder() {
     fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${issLat}&lon=${issLng}&appid=${process.env.REACT_APP_OPEN_WEATHER_KEY}`)
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then((data) => {
+      console.log(data[0].country)
+      setCountry(data[0].country)
+      setState(data[0].state)
+      setPlace(data[0].name)
+    })
   }
 
   function updateDistance() {
@@ -168,12 +176,15 @@ function App() {
         </div>
         <div className="info-card">
           <h1>Country:</h1>
+          <h2 className="card-description">{country}</h2>
         </div>
         <div className="info-card">
           <h1>State:</h1>
+          <h2 className="card-description">{state}</h2>
         </div>
         <div className="info-card">
           <h1>Place:</h1>
+          <h2 className="card-description">{place}</h2>
         </div>
       </div>
     </>
