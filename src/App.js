@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react"
 import mapboxgl from "!mapbox-gl" // eslint-disable-line import/no-webpack-loader-syntax
 import distance from "@turf/distance"
-mapboxgl.accessToken="pk.eyJ1Ijoiemh5bG93IiwiYSI6ImNsNXJrZzBpeDFhYmkzY292bGNjZnppcDIifQ.qbE1BTCATVEh2s6D-uaicg"
+mapboxgl.accessToken=process.env.REACT_APP_MAPBOX_TOKEN
 
 function App() {
   const mapContainer = useRef(null)
@@ -13,18 +13,17 @@ function App() {
   const [userLat, setUserLat] = useState(null)
   const [issLng, setIssLng] = useState(null)
   const [issLat, setIssLat] = useState(null)
-  const [zoom, setZoom] = useState(3)
 
   useEffect(() => {
     if (map.current) return // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v11",
-      // center: [lng, lat],
-      zoom: zoom,
+      center: [-100, 40],
+      zoom: 3,
       projection: "globe",
     })
-  })
+  },)
 
   useEffect(() => {
     if (!map.current) return // wait for map to initialize
@@ -73,8 +72,8 @@ function App() {
       const updateSource = setInterval(async () => {
         const geojson = await getLocation(updateSource)
         map.current.getSource("iss").setData(geojson)
-        setIssLat(geojson.features[0].geometry.coordinates[0])
-        setIssLng(geojson.features[0].geometry.coordinates[1])
+        setIssLat(geojson.features[0].geometry.coordinates[1])
+        setIssLng(geojson.features[0].geometry.coordinates[0])
       }, 5000)
 
       async function getLocation(updateSource) {
@@ -133,7 +132,13 @@ function App() {
     console.log(`The distance from your location is ${Math.round(distance([userLat, userLng], [issLat, issLng], "miles"))} miles`)
   }, [issLat, issLng, userLat, userLng])
 
-  
+  function findTheIss() {
+    map.current.flyTo({
+      center: [issLng, issLat],
+      zoom: 5,
+      speed: 0.5
+    })
+  }
 
   return (
     <>
@@ -141,7 +146,11 @@ function App() {
         <div className="sidebar">
           Longitude: {barLng} | Latitude: {barLat} | Zoom: {barZoom}
         </div>
-        <div ref={mapContainer} className="map-container" />
+        <div ref={mapContainer} className="map-container"></div>
+      </div>
+      <button onClick={findTheIss} className="issBtn">Find the ISS</button>
+      <div className="issInfo">
+
       </div>
     </>
   )

@@ -14,3 +14,12 @@
     margin: 12px;
     border-radius: 4px;
 }
+
+.issBtn {
+    margin: 25px 0 25px 50%;
+}
+
+.issInfo {
+    background-color: rgb(140, 0, 255);
+    height: 30rem;
+}
