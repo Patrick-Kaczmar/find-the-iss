@@ -21,8 +21,12 @@
 
 .issInfo {
     background-color: rgb(140, 0, 255);
-    height: 30rem;
+    height: 28rem;
     justify-content: center;
+}
+
+.no-show {
+    display: none;
 }
 
 .distance {
@@ -31,6 +35,8 @@
 }
 
 .info-card {
+    position: relative;
+    z-index: 0;
     float: left;
     background-color: green;
     margin-top: 30px;
@@ -45,6 +51,47 @@
 
 .card-description {
     margin-top: 80px;
+}
+
+.my-modal {
+    position: absolute;
+    z-index: 1;
+    color: blue;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.726);;
+}
+
+.modal-parent {
+    background-color: orange;
+    z-index: 3;
+    position: absolute;
+    width: 99.15%;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 7% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%; 
+    text-align: center;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 #distanceHeader {

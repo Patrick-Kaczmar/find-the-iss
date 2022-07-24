@@ -1,11 +1,14 @@
 import React, { useRef, useEffect, useState } from "react"
 import mapboxgl from "!mapbox-gl" // eslint-disable-line import/no-webpack-loader-syntax
 import distance from "@turf/distance"
+import Modal from './modal'
+
 mapboxgl.accessToken=process.env.REACT_APP_MAPBOX_TOKEN
 
 function App() {
   const mapContainer = useRef(null)
   const map = useRef(null)
+  const infoDiv = useRef()
   const [barLat, setBarLat] = useState(null)
   const [barLng, setBarLng] = useState(null)
   const [barZoom, setBarZoom] = useState(null)
@@ -137,6 +140,7 @@ function App() {
   }, [issLat, issLng, userLat, userLng])
 
   function findTheIss() {
+    infoDiv.current.classList.remove('no-show')
     map.current.flyTo({
       center: [issLng, issLat],
       zoom: 5,
@@ -150,11 +154,18 @@ function App() {
     fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${issLat}&lon=${issLng}&appid=${process.env.REACT_APP_OPEN_WEATHER_KEY}`)
     .then(response => response.json())
     .then((data) => {
-      console.log(data[0].country)
+      console.log(data)
+      if (data.length === 0) {
+        openModal()
+      }
       setCountry(data[0].country)
       setState(data[0].state)
       setPlace(data[0].name)
     })
+  }
+
+  function openModal() {
+    
   }
 
   function updateDistance() {
@@ -170,21 +181,24 @@ function App() {
         <div ref={mapContainer} className="map-container"></div>
       </div>
       <button onClick={findTheIss} className="issBtn">Find the ISS</button>
-      <div className="issInfo">
+      <div ref={infoDiv} className="issInfo no-show">
         <div className="distance">
           <h1 id="distanceHeader">The I.S.S is {userDistance} miles from your location</h1>
         </div>
-        <div className="info-card">
-          <h1>Country:</h1>
-          <h2 className="card-description">{country}</h2>
-        </div>
-        <div className="info-card">
-          <h1>State:</h1>
-          <h2 className="card-description">{state}</h2>
-        </div>
-        <div className="info-card">
-          <h1>Place:</h1>
-          <h2 className="card-description">{place}</h2>
+        <div className="modal-parent">
+          <Modal />
+          <div className="info-card">
+            <h1>Country:</h1>
+            <h2 className="card-description">{country}</h2>
+          </div>
+          <div className="info-card">
+            <h1>State:</h1>
+            <h2 className="card-description">{state}</h2>
+          </div>
+          <div className="info-card">
+            <h1>Place:</h1>
+            <h2 className="card-description">{place}</h2>
+          </div>
         </div>
       </div>
     </>
