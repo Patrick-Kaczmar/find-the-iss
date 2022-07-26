@@ -1,3 +1,7 @@
+body {
+    background-image: radial-gradient(circle, black, gray, black)
+}
+
 .map-container {
     height: 400px;
 }
@@ -16,12 +20,23 @@
 }
 
 .issBtn {
-    margin: 25px 0 25px 50%;
+    margin: 25px 0 0px 48%;
+    border-radius: 50px;
+    height: 70px;
+    width: 70px;
+    background-color: rgb(153, 153, 255);
+    border-style: solid;
+    border-color: rgb(0, 0, 0);
+    border-width: 4px;
+}
+
+.issBtn:hover {
+    cursor: pointer;
+    border-color: rgb(133, 255, 122);
 }
 
 .issInfo {
-    background-color: rgb(140, 0, 255);
-    height: 28rem;
+    height: 27rem;
     justify-content: center;
 }
 
@@ -38,7 +53,7 @@
     position: relative;
     z-index: 0;
     float: left;
-    background-color: green;
+    background-color: rgb(0, 113, 128);
     margin-top: 30px;
     margin-left: 10%;
     height: 300px;
@@ -61,12 +76,11 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.726);;
+    background-color: rgba(0, 0, 0, 0.726);
 }
 
 .modal-parent {
-    background-color: orange;
-    z-index: 3;
+    background-color: rgb(16, 55, 56);
     position: absolute;
     width: 99.15%;
 }
