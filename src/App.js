@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from "react"
 import mapboxgl from "!mapbox-gl" // eslint-disable-line import/no-webpack-loader-syntax
 import distance from "@turf/distance"
-import Modal from './modal'
 
 mapboxgl.accessToken=process.env.REACT_APP_MAPBOX_TOKEN
 
@@ -9,6 +8,7 @@ function App() {
   const mapContainer = useRef(null)
   const map = useRef(null)
   const infoDiv = useRef()
+  const modalToggle = useRef()
   const [barLat, setBarLat] = useState(null)
   const [barLng, setBarLng] = useState(null)
   const [barZoom, setBarZoom] = useState(null)
@@ -164,12 +164,16 @@ function App() {
     })
   }
 
-  function openModal() {
-    
-  }
-
   function updateDistance() {
     setUserDistance(Math.round(distance([userLat, userLng], [issLat, issLng]))) 
+  }
+
+  function openModal() {
+    modalToggle.current.classList.remove('no-show')
+  }
+
+  function closeModal() {
+    modalToggle.current.classList.add('no-show')
   }
 
   return (
@@ -181,12 +185,17 @@ function App() {
         <div ref={mapContainer} className="map-container"></div>
       </div>
       <button onClick={findTheIss} className="issBtn">Find the ISS</button>
-      <div ref={infoDiv} className="issInfo no-show">
+      <div ref={infoDiv} onClick={closeModal} className="issInfo no-show">
         <div className="distance">
           <h1 id="distanceHeader">The I.S.S is {userDistance} miles from your location</h1>
         </div>
         <div className="modal-parent">
-          <Modal />
+          <div ref={modalToggle} className="my-modal no-show">
+              <div className="modal-content">
+                  <span onClick={closeModal} className="close">&times;</span>
+                  <p>ISS IS CURRENTLY OVER A LARGE BODY OF WATER</p>
+              </div>
+          </div>
           <div className="info-card">
             <h1>Country:</h1>
             <h2 className="card-description">{country}</h2>
