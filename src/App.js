@@ -111,7 +111,7 @@ function App() {
         }
       }
     })
-  })
+  }, [])
 
   useEffect(() => {
     if (!map.current) return // wait for map to initialize
@@ -135,10 +135,6 @@ function App() {
     })
   }, [])
 
-  useEffect(() => {
-    console.log(`The distance from your location is ${Math.round(distance([userLat, userLng], [issLat, issLng], "miles"))} miles`)
-  }, [issLat, issLng, userLat, userLng])
-
   function findTheIss() {
     infoDiv.current.classList.remove('no-show')
     map.current.flyTo({
@@ -154,9 +150,9 @@ function App() {
     fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${issLat}&lon=${issLng}&appid=${process.env.REACT_APP_OPEN_WEATHER_KEY}`)
     .then(response => response.json())
     .then((data) => {
-      console.log(data)
-      if (data.length === 0) {
+      if (data.length === 0 || data.cod === '400') {
         openModal()
+        return
       }
       setCountry(data[0].country)
       setState(data[0].state)
