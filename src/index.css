@@ -95,7 +95,7 @@ body {
 }
 
 .close {
-    color: #aaa;
+    color: rgb(255, 0, 0);
     float: right;
     font-size: 28px;
     font-weight: bold;
