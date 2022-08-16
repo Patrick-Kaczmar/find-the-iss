@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from "react"
 import mapboxgl from "!mapbox-gl" // eslint-disable-line import/no-webpack-loader-syntax
 import distance from "@turf/distance"
 
-mapboxgl.accessToken=process.env.REACT_APP_MAPBOX_TOKEN
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN
 
 function App() {
   const mapContainer = useRef(null)
@@ -30,7 +30,7 @@ function App() {
       zoom: 3,
       projection: "globe",
     })
-  },)
+  })
 
   useEffect(() => {
     if (!map.current) return // wait for map to initialize
@@ -81,7 +81,7 @@ function App() {
         map.current.getSource("iss").setData(geojson)
         setIssLat(geojson.features[0].geometry.coordinates[1])
         setIssLng(geojson.features[0].geometry.coordinates[0])
-      }, 5000)
+      }, 2000)
 
       async function getLocation(updateSource) {
         // Make a GET request to the API and return the location of the ISS.
@@ -136,40 +136,42 @@ function App() {
   }, [])
 
   function findTheIss() {
-    infoDiv.current.classList.remove('no-show')
+    infoDiv.current.classList.remove("no-show")
     map.current.flyTo({
       center: [issLng, issLat],
       zoom: 5,
-      speed: 0.5
+      speed: 0.5,
     })
     updateDistance()
     locationFinder()
   }
 
   function locationFinder() {
-    fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${issLat}&lon=${issLng}&appid=${process.env.REACT_APP_OPEN_WEATHER_KEY}`)
-    .then(response => response.json())
-    .then((data) => {
-      if (data.length === 0 || data.cod === '400') {
-        openModal()
-        return
-      }
-      setCountry(data[0].country)
-      setState(data[0].state)
-      setPlace(data[0].name)
-    })
+    fetch(
+      `https://api.openweathermap.org/geo/1.0/reverse?lat=${issLat}&lon=${issLng}&appid=${process.env.REACT_APP_OPEN_WEATHER_KEY}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.length === 0 || data.cod === "400") {
+          openModal()
+          return
+        }
+        setCountry(data[0].country)
+        setState(data[0].state)
+        setPlace(data[0].name)
+      })
   }
 
   function updateDistance() {
-    setUserDistance(Math.round(distance([userLat, userLng], [issLat, issLng]))) 
+    setUserDistance(Math.round(distance([userLat, userLng], [issLat, issLng])))
   }
 
   function openModal() {
-    modalToggle.current.classList.remove('no-show')
+    modalToggle.current.classList.remove("no-show")
   }
 
   function closeModal() {
-    modalToggle.current.classList.add('no-show')
+    modalToggle.current.classList.add("no-show")
   }
 
   return (
@@ -180,17 +182,23 @@ function App() {
         </div>
         <div ref={mapContainer} className="map-container"></div>
       </div>
-      <button onClick={findTheIss} className="issBtn">Find the ISS</button>
+      <button onClick={findTheIss} className="issBtn">
+        Find the ISS
+      </button>
       <div ref={infoDiv} onClick={closeModal} className="issInfo no-show">
         <div className="distance">
-          <h1 id="distanceHeader">The I.S.S is {userDistance} miles from your location</h1>
+          <h1 id="distanceHeader">
+            The I.S.S is {userDistance} miles from your location
+          </h1>
         </div>
         <div className="modal-parent">
           <div ref={modalToggle} className="my-modal no-show">
-              <div className="modal-content">
-                  <span onClick={closeModal} className="close">&times;</span>
-                  <p>ISS IS CURRENTLY OVER A LARGE BODY OF WATER</p>
-              </div>
+            <div className="modal-content">
+              <span onClick={closeModal} className="close">
+                &times;
+              </span>
+              <p>ISS IS CURRENTLY OVER A LARGE BODY OF WATER</p>
+            </div>
           </div>
           <div className="info-card">
             <h1>Country:</h1>
